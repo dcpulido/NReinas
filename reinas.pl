@@ -26,11 +26,11 @@ fin([X|Cdr]):-not(jaque(X,Cdr)),
 			  fin(Cdr).
 
 %Comprueba si una reina puede comerse a otra es necesario jaque/2 y jaque/3
-jaque(X,P,[C|_]):-X is C+P;
+jaque3(X,P,[C|_]):-X is C+P;
 				  X is C-P;
 				  X=C.
-jaque(X,P,[_|R]):- P1 is P + 1,
-				   jaque(X,P1,R).
+jaque3(X,P,[_|R]):- P1 is P + 1,
+				   jaque3(X,P1,R).
 
 jaque(_,[]):-fail.
 jaque(X,Y):-jaque3(X,1,Y).
