@@ -29,7 +29,8 @@ fin([X|Cdr]):-not(jaque(X,Cdr)),
 jaque(X,P,[C|_]):-X is C+P;
 				  X is C-P;
 				  X=C.
-jaque(X,P,[_|R]):-
+jaque(X,P,[_|R]):- P1 is P + 1,
+				   jaque(X,P1,R).
 
 jaque(_,[]):-fail.
 jaque(X,Y):-jaque3(X,1,Y).
