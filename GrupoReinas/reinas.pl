@@ -1,5 +1,5 @@
-
-%posibles soluciones al problema de las nreinas
+%
+posibles soluciones al problema de las nreinas
 %primero generamos un tablero
 nreinas(N,Sol):-tablero(N,Tab),
 				per(Tab,Sol),

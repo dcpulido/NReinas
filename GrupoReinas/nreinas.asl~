@@ -1,0 +1,83 @@
+/* Initial beliefs */
+
+qfor(Y,Y,L,R):- mirafila(Y,Y,L,R,Y).
+
+qfor(X,Y,L,[MF|R]):-	X1=X+1 &
+						mirafila(X,Y,L,MF,Y) &
+						qfor(X1,Y,L,R).
+
+mirafila(X,0,L,[],S):-	ataca([X,0],L,S).
+mirafila(X,0,_,[[X,0]],_).
+mirafila(X,Y,L,MF,S):-	Y1=Y-1 &
+						ataca([X,Y],L,S) &
+						mirafila(X,Y1,L,MF,S).
+mirafila(X,Y,L,[[X,Y]|MF],S):-	Y1=Y-1 &
+								mirafila(X,Y1,L,MF,S).
+
+ataca([],[],_).
+ataca([X,_],[[X,_]|_],_).
+ataca([_,Y],[[_,Y]|_],_).
+
+ataca(Q,[Car|Cdr],P):-	ataca(Q,Cdr,P)|
+						atacaDiag(Q,P,[Car|Cdr]).
+
+atacaDiag([X1,X2],P,[[C1,C2]|R]):-	comprueba(X1,X2,P,[[C1,C2]|R])|
+								    nextlvl([X1,X2],P,[[C1,C2]|R]).
+
+nextlvl(_,0,_):-!,fail.
+nextlvl([X1,X2],P,[[C1,C2]|R]):-P1=P-1 & 
+								atacaDiag([X1,X2],P1,[[C1,C2]|R]).
+
+
+
+comprueba(X1,X2,P,[[C1,C2]|R]):-comprueba1(X1,X2,P,C1,C2)|
+						  		comprueba2(X1,X2,P,C1,C2)|
+						  		comprueba3(X1,X2,P,C1,C2)|
+			   			  		comprueba4(X1,X2,P,C1,C2)|
+						  		comprueba5(X1,X2,P,C1,C2)|
+						  		comprueba(X1,X2,P,R).
+
+
+comprueba1(X1,X2,P,C1,C2):-	X1=C1+P & X2=C2+P.
+comprueba2(X1,X2,P,C1,C2):-	X1=C1-P & X2=C2+P.
+comprueba3(X1,X2,P,C1,C2):-	X1=C1+P & X2=C2-P.
+comprueba4(X1,X2,P,C1,C2):-	X1=C1-P & X2=C2-P.
+comprueba5(X1,X2,_,C1,C2):-	X1=C1 & X2=C2.						
+
+monta([],[]).
+monta([Car|Cdr],[[X,Y]|L]):- despieza(Car,X,Y) &
+							 monta(Cdr,L).
+						   
+despieza([],[],[]).
+despieza(q(X,Y),X,Y).
+
+limpiar(X, [X|Xs], Xs).
+limpiar(X, [Y|Ys], [Y|Zs]):- limpiar(X, Ys, Zs).
+
+
+queen(0,1).
+
+/* Initial goal */
+!start.
+/* Plans */
+
++!start:true <-
+	.findall(q(C,D),queen(C,D),L);
+	?monta(L,Lista);
+	!tablero(X,Y);
+	?qfor(X,Y,Lista,ListaPosibles);
+	.print("Sin Limpiar: ",ListaPosibles);
+	?limpiar([],ListaPosibles,LPosibles);
+	.print("Limpiada: ",LPosibles).
+	
++!tablero(X,Y):size(N)<-
+	X=0;
+	Y=N-1.
+
+	
+	
+
+
+	
+
+
